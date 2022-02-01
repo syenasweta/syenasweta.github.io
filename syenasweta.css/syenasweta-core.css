@@ -1,0 +1,588 @@
+/*
+ * Syenasweta.css
+ * A CSS Library for Idless and Classless HTML
+ * Author: Nashrullah Ali Fauzi
+ * Version: 1.0.0
+ * License:  MIT License
+ * Project: https://github.com/syenasweta
+ */
+
+@charset "UTF-8";
+
+/* @import url("https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap"); */
+
+:root {
+  color-scheme: light dark;
+  --syenasweta-font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  --syenasweta-font-serif: 'Merriweather', Times, serif;
+  --syenasweta-font-mono: Consolas, monaco, 'Ubuntu Mono', 'Liberation Mono', 'Courier New', Courier, monospace;
+  --syenasweta-font-size: 16px;
+  --syenasweta-font-s: 14px;
+  --syenasweta-font-size-serif: 18px;
+  --syenasweta-content-width: 70ch;
+  --syenasweta-spacing: 1.5em;
+  --syenasweta-spacing-s: calc(0.5 * var(--spacing));
+  --syenasweta-spacing-m: var(--spacing);
+  --syenasweta-spacing-l: calc(1.5 * var(--spacing));
+  --syenasweta-spacing-xl: calc(2.5 * var(--spacing));
+  --syenasweta-spacing-xxl: calc(5 * var(--spacing));
+  --syenasweta-spacing-col: calc(6 * var(--spacing));
+  --syenasweta-spacing-width-max: 38rem;
+  --syenasweta-spacing-width-tiny: 15rem;
+  --syenasweta-spacing-width-xl: 50rem;
+
+  /* Syenasweta Light */
+  --syenasweta-light-text-a: #3D3D49;
+  --syenasweta-light-text-b: #3D3D49;
+  --syenasweta-light-background-a: #DDD8D5;
+  --syenasweta-light-background-b: #F6F8FA;
+  --syenasweta-light-background-c: #D5B7AF;
+;
+  --syenasweta-light-link-a: #3D3D49;
+  --syenasweta-light-link-b: #3D3D49;
+  --syenasweta-light-link-text: #FFFFFF;
+  --syenasweta-light-highlight-a: #79FFE1;
+  --syenasweta-light-highlight-text: #0C4047;
+
+  /* Syenasweta Dark */
+  --syenasweta-dark-text-a: #ffffff;
+  --syenasweta-dark-text-b: #eeeeee;
+  --syenasweta-dark-background-a: #000000;
+  --syenasweta-dark-background-b: #111111;
+  --syenasweta-dark-background-c: #222222;
+  --syenasweta-dark-link-a: #3291FF;
+  --syenasweta-dark-link-b: #0070F3;
+  --syenasweta-dark-link-text: #FFFFFF;
+  --syenasweta-dark-highlight-a: #7928CA;
+  --syenasweta-dark-highlight-text: #FFFFFF;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --syenasweta-light-text-a: var(--syenasweta-dark-text-a);
+    --syenasweta-light-text-b: var(--syenasweta-dark-text-b);
+    --syenasweta-light-background-a: var(--syenasweta-dark-background-a);
+    --syenasweta-light-background-b: var(--syenasweta-dark-background-b);
+    --syenasweta-light-background-c: var(--syenasweta-dark-background-c);
+    --syenasweta-light-link-a: var(--syenasweta-dark-link-a);
+    --syenasweta-light-link-b: var(--syenasweta-dark-link-b);
+    --syenasweta-light-link-text: var(--syenasweta-dark-link-text);
+    --syenasweta-light-highlight-a: var(--syenasweta-dark-highlight-a);
+    --syenasweta-light-highlight-text: var(--syenasweta-dark-highlight-text);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within {
+    scroll-behavior: auto;
+  }
+  *,
+  ::before,
+  ::after {
+    animation-delay: -1ms !important;
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    background-attachment: initial !important;
+    scroll-behavior: auto !important;
+    transition-delay: 0 !important;
+    transition-duration: 0 !important;
+  }
+}
+
+*,
+::before,
+::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+[disabled] {
+  pointer-events: none;
+  opacity: 0.3;
+}
+
+html:focus-within {
+  scroll-behavior: smooth;
+}
+
+html[data-theme='light'] {}
+
+html[data-theme='dark'] {
+  background: var(--syenasweta-dark-background-a);
+}
+
+
+address,
+area,
+article,
+aside,
+audio,
+blockquote,
+datalist,
+details,
+dl,
+fieldset,
+figure,
+form,
+input,
+iframe,
+img,
+meter,
+nav,
+ol,
+optgroup,
+option,
+output,
+p,
+pre,
+progress,
+ruby,
+section,
+table,
+textarea,
+ul,
+video {
+  margin-bottom: 1rem;
+}
+
+html,
+input,
+select,
+button {
+  font-family: var(--syenasweta-font-sans);
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+
+  /* Center body in page */
+  margin: 0 auto;
+  max-width: var(--syenasweta-content-width);
+  padding: 0 1rem;
+  border-radius: 6px;
+  overflow-x: hidden;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  background: var(--syenasweta-light-background-a);
+
+  /* Main body text */
+  color: var(--syenasweta-light-text-b);
+  font-size: 1.03rem;
+  line-height: 1.5;
+
+  -moz-tab-size: 4;
+  tab-size: 4;
+  word-break: break-word;
+  -webkit-tap-highlight-color: transparent; /* Remove the grey highlight on links in iOS */
+  -webkit-text-size-adjust: 100%;  /* Prevent adjustments of font size after orientation changes in iOS. */
+}
+
+::selection {
+  background: var(--syenasweta-light-highlight-a);
+  color: var(--syenasweta-light-highlight-text);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  line-height: 1;
+  color: var(--syenasweta-light-text-a);
+  padding-top: .875rem;
+}
+
+h1,
+h2,
+h3 {
+  color: var(--syenasweta-light-text-a);
+  padding-bottom: 2px;
+  margin-bottom: 8px;
+}
+
+h4,
+h5,
+h6 {
+  margin-bottom: .3rem;
+}
+
+h1 {
+  font-size: 2.25rem;
+}
+
+h2 {
+  font-size: 1.85rem;
+}
+
+h3 {
+  font-size: 1.55rem;
+}
+
+h4 {
+  font-size: 1.25rem;
+}
+
+h5 {
+  font-size: 1rem;
+}
+
+h6 {
+  font-size: .875rem;
+}
+
+a {
+  color: var(--syenasweta-light-link-a);
+}
+
+a:hover {
+  color: var(--syenasweta-light-link-b);
+}
+
+abbr:hover {
+  cursor: help;
+}
+
+blockquote {
+  padding: 1.5rem;
+  border-left: 5px solid var(--syenasweta-light-background-c);
+}
+
+abbr {
+  cursor: help;
+}
+
+blockquote *:last-child {
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+header {
+  padding: 2rem 1.5rem;
+
+  /* This sets the right and left margins to cancel out the body's margins. It's width is still the same, but the background stretches across the page's width. */
+
+  margin: -2rem calc(50% - 50vw) 2rem;
+
+  /* Shorthand for:
+
+  margin-top: -2rem;
+  margin-bottom: 2rem;
+
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw); */
+
+  padding-left: calc(50vw - 50%);
+  padding-right: calc(50vw - 50%);
+}
+
+header hgroup h1 {
+  font-size: 2rem;
+}
+
+header hgroup h2 {
+  font-size: 1rem;
+}
+
+header hgroup h2 small{
+  font-size: 1rem;
+}
+
+header h1,
+header h2,
+header h3 {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+header nav {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+header>*:first-child {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+header>*:last-child {
+  margin-bottom: 0;
+}
+
+a button,
+button,
+input[type="submit"],
+input[type="reset"],
+input[type="button"] {
+  font-size: 1rem;
+  display: inline-block;
+  padding: 6px 12px;
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  background: var(--syenasweta-light-link-a);
+  color: var(--syenasweta-light-link-text);
+  border: 0;
+  border-radius: 4px;
+  box-sizing: border-box;
+  cursor: pointer;
+  color: var(--syenasweta-light-link-text);
+}
+
+a button[disabled],
+button[disabled],
+input[type="submit"][disabled],
+input[type="reset"][disabled],
+input[type="button"][disabled] {
+  cursor: default;
+  opacity: .5;
+
+  /* Set the [X] cursor while hovering a disabled link */
+  cursor: not-allowed;
+}
+
+.button:focus,
+.button:enabled:hover,
+button:focus,
+button:enabled:hover,
+input[type="submit"]:focus,
+input[type="submit"]:enabled:hover,
+input[type="reset"]:focus,
+input[type="reset"]:enabled:hover,
+input[type="button"]:focus,
+input[type="button"]:enabled:hover {
+  background: var(--syenasweta-light-link-b);
+}
+
+a img {
+  margin-bottom: 0px;
+}
+
+code,
+pre,
+kbd,
+samp {
+  font-family: var(--syenasweta-font-mono);
+}
+
+code,
+samp,
+kbd,
+pre {
+  /* The main preformatted style. This is changed slightly across different cases. */
+  border: 1px solid var(--syenasweta-light-background-c);
+  padding: 3px 6px;
+  /* ↓ font-size is relative to containing element, so it scales for titles*/
+  font-size: 0.9em;
+}
+
+kbd {
+  border-bottom: 3px solid var(--syenasweta-light-background-c);
+}
+
+pre {
+  padding: 1rem 1.4rem;
+  max-width: 100%;
+  overflow: auto;
+}
+
+pre code {
+  /* When <code> is in a <pre>, reset it's formatting to blend in */
+  background: inherit;
+  font-size: inherit;
+  color: inherit;
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+code pre {
+  /* When <pre> is in a <code>, reset it's formatting to blend in */
+  display: inline;
+  background: inherit;
+  font-size: inherit;
+  color: inherit;
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+details {
+  /* Make the <details> look more "clickable" */
+  padding: .6rem 1rem;
+  background: var(--syenasweta-light-background-b);
+  border: 1px solid var(--syenasweta-light-background-c);
+  border-radius: 4px;
+}
+
+summary {
+  /* Makes the <summary> look more like a "clickable" link with the pointer cursor */
+  cursor: pointer;
+  font-weight: bold;
+}
+
+details[open] {
+  /* Adjust the <details> padding while open */
+  padding-bottom: .75rem;
+}
+
+details[open] summary {
+  /* Adjust the <details> padding while open */
+  margin-bottom: 6px;
+}
+
+details[open]>*:last-child {
+  /* Resets the bottom margin of the last element in the <details> while <details> is opened. This prevents double margins/paddings. */
+  margin-bottom: 0;
+}
+
+dt {
+  font-weight: bold;
+}
+
+dd::before {
+  /* Add an arrow to data table definitions */
+  content: '→ ';
+}
+
+hr {
+  /* Reset the border of the <hr> separator, then set a better line */
+  border: 0;
+  border-bottom: 1px solid var(--syenasweta-light-background-c);
+  margin: 1rem auto;
+
+  height: 0; /* Add the correct box sizing in Firefox. */
+  overflow: visible; /* Show the overflow in Edge and IE. */
+}
+
+fieldset {
+  margin-top: 1rem;
+  padding: 2rem;
+  border: 1px solid var(--syenasweta-light-background-c);
+  border-radius: 4px;
+}
+
+legend {
+  padding: auto .5rem;
+}
+
+table {
+  /* border-collapse sets the table's elements to share borders, rather than floating as separate "boxes". */
+  border-collapse: collapse;
+  width: 100%
+}
+
+td,
+th {
+  border: 1px solid var(--syenasweta-light-background-c);
+  text-align: left;
+  padding: .5rem;
+}
+
+th {
+  background: var(--syenasweta-light-background-b);
+}
+
+/*tr:nth-child(even) {
+  Set every other cell slightly darker. Improves readability.
+  background: var(--syenasweta-light-background-b);
+}*/
+
+table caption {
+  font-weight: bold;
+  margin-bottom: .5rem;
+}
+
+textarea {
+  /* Don't let the <textarea> extend off the screen naturally or when dragged by the user */
+  max-width: 100%;
+}
+
+ol,
+ul {
+  /* Replace the browser default padding */
+  padding-left: 2rem;
+}
+
+li {
+  margin-top: .4rem;
+}
+
+ul ul,
+ol ul,
+ul ol,
+ol ol {
+  margin-bottom: 0;
+}
+
+mark {
+  padding: 3px 6px;
+  background: var(--syenasweta-light-highlight-a);
+  color: var(--syenasweta-light-highlight-text);
+}
+
+textarea,
+select,
+input {
+  padding: 6px 12px;
+  margin-bottom: .5rem;
+  background: var(--syenasweta-light-background-b);
+  color: var(--syenasweta-light-text-b);
+  border: 1px solid var(--syenasweta-light-background-c);
+  /*border-radius: 4px;*/
+  box-shadow: none;
+  box-sizing: border-box;
+}
+
+img, canvas, iframe, video, svg, select, textarea {
+  max-width: 100%;
+  width: 100%;
+  height: auto;
+}
+
+img,
+video,
+svg {
+  max-width: 100%;
+  height: auto;
+}
+embed,
+iframe,
+object {
+  max-width: 100%;
+}
+iframe {
+  border-style: none;
+}
+
+img,
+picture {
+  max-width: 100%;
+}
+
+figure,
+audio,
+video {
+  max-width: var(--spacing-width-xl);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+figure figcaption {
+
+}
+
+/* Block Element */
+
+/* Inline Element */
+
