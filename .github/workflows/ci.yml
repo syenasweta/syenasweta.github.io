@@ -1,24 +1,213 @@
-name: ci
-on:
-  push:
-    branches:
-      - main
-permissions:
-  contents: write
+name: CI/CD
+
+on: [push]
+
+env:
+  BASE_URL_PREVIEW: website-romainclement.vercel.app
+
 jobs:
-  deploy:
-    runs-on: debian-bookworm
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v4
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
         with:
-          python-version: 3.x
-      - run: echo "cache_id=$(date --utc '+%V')" >> $GITHUB_ENV 
-      - uses: actions/cache@v3
+          python-version: '3.10'
+      - name: Cache Python modules
+        uses: actions/cache@v3
         with:
-          key: mkdocs-material-${{ env.cache_id }}
-          path: .cache
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/Pipfile.lock') }}
           restore-keys: |
-            mkdocs-material-
-      - run: pip install mkdocs-material 
-      - run: mkdocs gh-deploy --force
+            ${{ runner.os }}-pip-
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --upgrade pipenv
+          pipenv install --dev --deploy
+      - name: Run QA
+        run: |
+          pipenv run safety check --full-report
+          pipenv run black --check utils tests
+          pipenv run flake8 utils tests
+          pipenv run mypy --strict utils tests
+          pipenv run pytest -v --cov=utils --cov=tests --cov-branch --cov-report=term-missing tests
+          pipenv run coverage xml
+      - name: Publish code coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./coverage.xml
+
+  build-preview:
+    name: Build Preview
+    needs: test
+    runs-on: ubuntu-latest
+    if: ${{ !contains(github.ref, 'master') && !contains(github.ref, 'tags')}}
+
+    env:
+      APP_ENVIRONMENT: preview
+      MAILER_URL: ${{ secrets.MAILER_URL_PREVIEW }}
+      CHIFFRE_PUBLIC_KEY: ""
+      CHIFFRE_PROJECT_ID: ""
+
+    outputs:
+      github_ref_slug: ${{ steps.output_step.outputs.github_ref_slug }}
+      site_url: ${{ steps.output_step.outputs.site_url }}
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Inject slug/short variables
+        uses: rlespinasse/github-slug-action@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Cache Python modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/Pipfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --upgrade pipenv
+          pipenv install --deploy
+      - name: Set preview site URL using branch slug
+        run: echo "SITE_URL=https://${GITHUB_REF_SLUG_URL}-${BASE_URL_PREVIEW}" >> $GITHUB_ENV
+      - name: Build package
+        run: |
+          pipenv run mkdocs build --strict
+          cp -R content/.well-known dist/.
+          cp content/.vercelignore dist/.
+          echo "${SITE_URL}" > dist/CNAME
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-preview
+          path: dist
+      - id: output_step
+        run: |
+          echo "::set-output name=github_ref_slug::${GITHUB_REF_SLUG_URL}"
+          echo "::set-output name=site_url::${SITE_URL}"
+
+  build-production:
+    name: Build Production
+    needs: test
+    runs-on: ubuntu-latest
+    if: contains(github.ref, 'master')
+
+    env:
+      APP_ENVIRONMENT: production
+      SITE_URL: ${{ secrets.SITE_URL }}
+      MAILER_URL: ${{ secrets.MAILER_URL }}
+      CHIFFRE_PUBLIC_KEY: ${{ secrets.CHIFFRE_PUBLIC_KEY }}
+      CHIFFRE_PROJECT_ID: ${{ secrets.CHIFFRE_PROJECT_ID }}
+
+    outputs:
+      site_url: ${{ steps.output_step.outputs.site_url }}
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Cache Python modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/Pipfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --upgrade pipenv
+          pipenv install --deploy
+      - name: Build package
+        run: |
+          pipenv run mkdocs build
+          cp -R content/.well-known dist/.
+          cp content/.vercelignore dist/.
+          echo "${SITE_URL}" > dist/CNAME
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-production
+          path: dist
+      - id: output_step
+        run: echo "::set-output name=site_url::${SITE_URL}"
+
+  deploy-preview:
+    name: Deploy Preview
+    needs: build-preview
+    runs-on: ubuntu-latest
+    environment:
+      name: preview/${{ needs.build-preview.outputs.github_ref_slug }}
+      url: ${{ needs.build-preview.outputs.site_url }}
+    if: ${{ !contains(github.ref, 'master') && !contains(github.ref, 'tags')}}
+
+    env:
+      VERCEL_ORG_ID: ${{ secrets.NOW_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.NOW_PROJECT_ID }}
+      VERCEL_TOKEN: ${{ secrets.NOW_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Inject slug/short variables
+        uses: rlespinasse/github-slug-action@v4
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: build-preview
+          path: dist
+      - name: Set vercel alias using branch slug
+        run: echo "VERCEL_ALIAS=${GITHUB_REF_SLUG_URL}-${BASE_URL_PREVIEW}" >> $GITHUB_ENV
+      - name: Deploy to Vercel
+        run: |
+          cd dist
+          DEPLOYMENT_URL=$(vercel --confirm --token $VERCEL_TOKEN)
+          vercel alias --token $VERCEL_TOKEN set $DEPLOYMENT_URL $VERCEL_ALIAS
+
+  deploy-production:
+    name: Deploy Production
+    needs: build-production
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: ${{ needs.build-production.outputs.site_url }}
+    if: contains(github.ref, 'master')
+
+    permissions:
+      pages: write
+      id-token: write
+
+    env:
+      VERCEL_ORG_ID: ${{ secrets.NOW_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.NOW_PROJECT_ID }}
+      VERCEL_TOKEN: ${{ secrets.NOW_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: build-production
+          path: dist
+      - name: Deploy to Vercel
+        run: cd dist && vercel --confirm --token $VERCEL_TOKEN --prod
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: dist
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
