@@ -1,3 +1,173 @@
-site_name: My Docs
+site_name: Syenasweta
+site_description: Freelance Data / Machine Learning Engineer & Trainer
+site_author: Nashrullah Ali Fauzi
+site_url: !ENV SITE_URL
+
+repo_name: syenasweta/syenasweta.github.io
+repo_url: https://github.com/syenasweta/syenasweta.github.io
+edit_uri: edit/main/content/
+docs_dir: content
+site_dir: site
+
+nav:
+  - index.md
+  - Company:
+      - company/index.md
+      - company/services.md
+      - company/clients.md
+      - company/certifications.md
+  - Projects:
+      - projects/index.md
+      - projects/datasette-dashboards.md
+      - projects/mailer.md
+      - projects/griffonnage.md
+  - Talks:
+      - talks/index.md
+      - talks/machine-learning-with-sqlite.md
+      - talks/datasette-workshop.md
+      - talks/sqlite-udf-python.md
+      - talks/meetup-python-grenoble-is-back.md
+      - talks/django-admin-framework.md
+      - talks/playful-lookback-pythonic-year-2022.md
+      - talks/jupyter-without-server.md
+      - talks/python-horror-show.md
+      - talks/back-from-europython-2022.md
+      - talks/natural-language-of-politics.md
+      - talks/python-celery.md
+      - talks/modern-python-development.md
+      - talks/swarm-factor.md
+      - Les RDV de L'IAccessible:
+          - talks/rdv-iaccessible/index.md
+          - talks/rdv-iaccessible/low-ia-outils.md
+          - talks/rdv-iaccessible/low-ia-puissance-impact.md
+          - talks/rdv-iaccessible/small-data.md
+          - talks/rdv-iaccessible/data-for-all.md
+  - Music:
+      - music/index.md
+      - music/hambush.md
+  - Articles:
+      - articles/index.md
+      - articles/python-pathlib-glob-patterns.md
+      - articles/vanilla-html-templates.md
+      - articles/diataxis.md
+      - articles/python-packages-development-pipenv.md
+      - articles/static-data-warehouse-sqlite-metabase.md
+      - articles/cloudflare-setup-cdn-paas.md
+      - articles/sentry-url-fragments.md
+      - articles/github-actions-cicd-workflows.md
+  - Contact: contact.md
+
+extra:
+  version: 1.0.0
+  authors:
+    syenasweta:
+      name: Nashrullah Ali Fauzi
+      email: syenasweta@gmail.com
+      url: https://syenasweta.tech
+  analytics:
+    provider: chiffre
+    public_key: !ENV CHIFFRE_PUBLIC_KEY
+    project_id: !ENV CHIFFRE_PROJECT_ID
+  forms:
+    contact:
+      base_url: !ENV MAILER_URL
+      method: POST
+      action_path: /api/mail/form
+      action_path_js: /api/mail
+      enable_js: true
+  social:
+    - icon: fontawesome/solid/rss
+      link: /feed/articles/rss.xml
+      name: RSS Feed
+    - icon: fontawesome/solid/video
+      link: https://cal.com/syenasweta
+      name: Schedule a call
+    - icon: fontawesome/brands/github
+      link: https://github.com/syenasweta
+      name: GitHub
+    - icon: fontawesome/brands/gitlab
+      link: https://gitlab.com/syenasweta
+      name: GitLab
+    - icon: fontawesome/brands/linkedin
+      link: https://www.linkedin.com/in/syenasweta
+      name: LinkedIn
+    - icon: fontawesome/brands/connectdevelop
+      link: https://www.malt.fr/profile/syenasweta
+      name: Malt
+    - icon: fontawesome/solid/rocket
+      link: https://app.comet.co/freelancer/profile/syenasweta
+      name: Comet
+    - icon: fontawesome/brands/keybase
+      link: https://keybase.io/syenasweta
+      name: Keybase
+    - icon: fontawesome/solid/key
+      link: /.well-known/openpgpkey/hu/syenasweta
+      name: PGP
+
 theme:
   name: material
+  custom_dir: overrides
+  static_templates:
+    - feed/articles/atom.xml
+    - feed/articles/rss.xml
+    - feed/articles/feed.json
+    - robots.txt
+  language: en
+  font: false
+  features:
+    - content.code.copy
+    # - navigation.indexes
+    - navigation.sections
+    - navigation.tabs
+    - navigation.top
+    - search.highlight
+  logo: static/icon.png
+  favicon: static/icon.png
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: white
+      accent: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to Dark Mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: amber
+      accent: amber
+      toggle:
+        icon: material/weather-night
+        name: Switch to Light Mode
+
+# hooks:
+#  - utils/hooks.py
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.caret
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - pymdownx.highlight
+  - pymdownx.mark
+  - pymdownx.superfences
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+  - toc:
+      permalink: "#"
+
+extra_css:
+  - assets/stylesheets/extra.css
+  - assets/stylesheets/forms.css
+
+extra_javascript:
+  # https://squidfunk.github.io/mkdocs-material/reference/mathjax/#configuration
+  - assets/javascripts/mathjax.js
+  - https://polyfill.io/v3/polyfill.min.js?features=es6
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
