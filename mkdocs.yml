@@ -11,51 +11,6 @@ site_dir: site
 
 nav:
   - index.md
-  - Company:
-      - company/index.md
-      - company/services.md
-      - company/clients.md
-      - company/certifications.md
-  - Projects:
-      - projects/index.md
-      - projects/datasette-dashboards.md
-      - projects/mailer.md
-      - projects/griffonnage.md
-  - Talks:
-      - talks/index.md
-      - talks/machine-learning-with-sqlite.md
-      - talks/datasette-workshop.md
-      - talks/sqlite-udf-python.md
-      - talks/meetup-python-grenoble-is-back.md
-      - talks/django-admin-framework.md
-      - talks/playful-lookback-pythonic-year-2022.md
-      - talks/jupyter-without-server.md
-      - talks/python-horror-show.md
-      - talks/back-from-europython-2022.md
-      - talks/natural-language-of-politics.md
-      - talks/python-celery.md
-      - talks/modern-python-development.md
-      - talks/swarm-factor.md
-      - Les RDV de L'IAccessible:
-          - talks/rdv-iaccessible/index.md
-          - talks/rdv-iaccessible/low-ia-outils.md
-          - talks/rdv-iaccessible/low-ia-puissance-impact.md
-          - talks/rdv-iaccessible/small-data.md
-          - talks/rdv-iaccessible/data-for-all.md
-  - Music:
-      - music/index.md
-      - music/hambush.md
-  - Articles:
-      - articles/index.md
-      - articles/python-pathlib-glob-patterns.md
-      - articles/vanilla-html-templates.md
-      - articles/diataxis.md
-      - articles/python-packages-development-pipenv.md
-      - articles/static-data-warehouse-sqlite-metabase.md
-      - articles/cloudflare-setup-cdn-paas.md
-      - articles/sentry-url-fragments.md
-      - articles/github-actions-cicd-workflows.md
-  - Contact: contact.md
 
 extra:
   version: 1.0.0
@@ -64,10 +19,6 @@ extra:
       name: Nashrullah Ali Fauzi
       email: syenasweta@gmail.com
       url: https://syenasweta.tech
-  analytics:
-    provider: chiffre
-    public_key: !ENV CHIFFRE_PUBLIC_KEY
-    project_id: !ENV CHIFFRE_PROJECT_ID
   forms:
     contact:
       base_url: !ENV MAILER_URL
